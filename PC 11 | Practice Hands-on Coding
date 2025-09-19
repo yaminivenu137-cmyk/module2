@@ -1,0 +1,71 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const QuizResultApp());
+}
+
+class QuizResultApp extends StatelessWidget {
+  const QuizResultApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Quiz Result',
+      home: const ResultScreen(
+        trueAnswers: 6,
+        wrongAnswers: 0,
+        totalQuestions: 6,
+      ),
+    );
+  }
+}
+
+class ResultScreen extends StatelessWidget {
+  final int trueAnswers;
+  final int wrongAnswers;
+  final int totalQuestions;
+
+  const ResultScreen({
+    super.key,
+    required this.trueAnswers,
+    required this.wrongAnswers,
+    required this.totalQuestions,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    bool isPerfect = trueAnswers == totalQuestions;
+
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Quiz Result"),
+        backgroundColor: Colors.deepPurple,
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset(
+              isPerfect ? "assets/success.png" : "assets/failure.png",
+              width: 150,
+              height: 150,
+            ),
+            const SizedBox(height: 20),
+            Text(
+              "True Answers: $trueAnswers",
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            Text(
+              "Wrong Answers: $wrongAnswers",
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            Text(
+              "Total Questions: $totalQuestions",
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

@@ -1,0 +1,88 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const MaterialApp(
+      title: 'Two Screen Counter',
+      home: HomeScreen(),
+      debugShowCheckedModeBanner: false,
+    );
+  }
+}
+
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
+
+  @override
+  _HomeScreenState createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  int counter = 0;
+
+  void _incrementCounter() {
+    setState(() {
+      counter++;
+    });
+  }
+
+  void _navigateToSecondScreen() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => SecondScreen(counter: counter),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text("Home Screen")),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text("Home Screen Counter: $counter",
+                style: const TextStyle(fontSize: 22)),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: _navigateToSecondScreen,
+              child: const Text("Go to Second Screen"),
+            ),
+          ],
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _incrementCounter,
+        child: const Icon(Icons.add),
+      ),
+    );
+  }
+}
+
+class SecondScreen extends StatelessWidget {
+  final int counter;
+
+  const SecondScreen({super.key, required this.counter});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text("Second Screen")),
+      body: Center(
+        child: Text(
+          "Second Screen Counter: $counter",
+          style: const TextStyle(fontSize: 22),
+        ),
+      ),
+    );
+  }
+}

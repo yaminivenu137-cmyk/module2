@@ -1,0 +1,115 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+// ROUTING CLASS
+class AppRoutes {
+  static const String home = '/';
+  static const String about = '/about';
+
+  static Route<dynamic> generateRoute(RouteSettings settings) {
+    switch (settings.name) {
+      case home:
+        return MaterialPageRoute(builder: (_) => const HomeScreen());
+      case about:
+        final color = settings.arguments as Color;
+        return MaterialPageRoute(
+          builder: (_) => AboutScreen(backgroundColor: color),
+        );
+      default:
+        return MaterialPageRoute(
+          builder: (_) => const Scaffold(
+            body: Center(child: Text("Route not found")),
+          ),
+        );
+    }
+  }
+}
+
+// MAIN APP
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Routing Example',
+      initialRoute: AppRoutes.home,
+      onGenerateRoute: AppRoutes.generateRoute,
+      debugShowCheckedModeBanner: false,
+    );
+  }
+}
+
+// HOME SCREEN
+class HomeScreen extends StatelessWidget {
+  const HomeScreen({super.key});
+
+  void _navigateToAbout(BuildContext context, Color color) {
+    Navigator.pushNamed(
+      context,
+      AppRoutes.about,
+      arguments: color, // passing color
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text("Home Screen")),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text("Choose a background color for About Screen:",
+                style: TextStyle(fontSize: 18)),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () => _navigateToAbout(context, Colors.red),
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+              child: const Text("Red"),
+            ),
+            const SizedBox(height: 10),
+            ElevatedButton(
+              onPressed: () => _navigateToAbout(context, Colors.green),
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
+              child: const Text("Green"),
+            ),
+            const SizedBox(height: 10),
+            ElevatedButton(
+              onPressed: () => _navigateToAbout(context, Colors.blue),
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.blue),
+              child: const Text("Blue"),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// ABOUT SCREEN
+class AboutScreen extends StatelessWidget {
+  final Color backgroundColor;
+
+  const AboutScreen({super.key, required this.backgroundColor});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: backgroundColor, // Scaffold background color
+      appBar: AppBar(
+        backgroundColor: backgroundColor, // AppBar background color
+        title: const Text("About Screen"),
+      ),
+      body: const Center(
+        child: Text(
+          "Welcome to the About Screen!",
+          style: TextStyle(fontSize: 22, color: Colors.white),
+        ),
+      ),
+    );
+  }
+}

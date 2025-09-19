@@ -1,0 +1,86 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const TwoButtonApp());
+}
+
+class TwoButtonApp extends StatelessWidget {
+  const TwoButtonApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Two Button Example',
+      home: TwoButtonScreen(),
+      debugShowCheckedModeBanner: false,
+    );
+  }
+}
+
+class TwoButtonScreen extends StatefulWidget {
+  @override
+  _TwoButtonScreenState createState() => _TwoButtonScreenState();
+}
+
+class _TwoButtonScreenState extends State<TwoButtonScreen> {
+  bool showImage = false; // flag to toggle view
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Two Button Example"),
+        centerTitle: true,
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            // Conditional Rendering
+            showImage
+                ? Image.asset(
+                    'assets/my_image.png', // Make sure to add image to assets folder
+                    height: 150,
+                  )
+                : Column(
+                    children: const [
+                      Text("Name: Varshini Sivapu",
+                          style: TextStyle(fontSize: 18)),
+                      Text("Phone: +91 9876543210",
+                          style: TextStyle(fontSize: 18)),
+                      Text("Email: varshini@example.com",
+                          style: TextStyle(fontSize: 18)),
+                    ],
+                  ),
+
+            const SizedBox(height: 30),
+
+            // Buttons
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      showImage = true;
+                    });
+                  },
+                  child: const Text("A (Show Image)"),
+                ),
+                const SizedBox(width: 20),
+                ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      showImage = false;
+                    });
+                  },
+                  child: const Text("B (Show Details)"),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

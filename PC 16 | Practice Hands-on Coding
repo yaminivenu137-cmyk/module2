@@ -1,0 +1,86 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const DrawingApp());
+}
+
+class DrawingApp extends StatelessWidget {
+  const DrawingApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Drawing App',
+      debugShowCheckedModeBanner: false,
+      home: const DrawingScreen(),
+    );
+  }
+}
+
+class DrawingScreen extends StatefulWidget {
+  const DrawingScreen({super.key});
+
+  @override
+  State<DrawingScreen> createState() => _DrawingScreenState();
+}
+
+class _DrawingScreenState extends State<DrawingScreen> {
+  List<Offset?> _points = [];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.white, // White background
+      appBar: AppBar(title: const Text("Simple Drawing App")),
+      body: GestureDetector(
+        onPanStart: (details) {
+          setState(() {
+            _points.add(details.localPosition);
+          });
+        },
+        onPanUpdate: (details) {
+          setState(() {
+            _points.add(details.localPosition);
+          });
+        },
+        onPanEnd: (details) {
+          _points.add(null); // Null = break between lines
+        },
+        child: CustomPaint(
+          painter: DrawingPainter(points: _points),
+          size: Size.infinite,
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          setState(() {
+            _points = []; // Clear screen
+          });
+        },
+        child: const Icon(Icons.clear),
+      ),
+    );
+  }
+}
+
+class DrawingPainter extends CustomPainter {
+  final List<Offset?> points;
+  DrawingPainter({required this.points});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = Colors.black
+      ..strokeWidth = 4.0
+      ..strokeCap = StrokeCap.round;
+
+    for (int i = 0; i < points.length - 1; i++) {
+      if (points[i] != null && points[i + 1] != null) {
+        canvas.drawLine(points[i]!, points[i + 1]!, paint);
+      }
+    }
+  }
+
+  @override
+  bool shouldRepaint(DrawingPainter oldDelegate) => true;
+}

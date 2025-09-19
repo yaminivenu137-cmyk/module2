@@ -1,0 +1,110 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Form Example',
+      theme: ThemeData(primarySwatch: Colors.blue),
+      home: const FormScreen(),
+    );
+  }
+}
+
+class FormScreen extends StatefulWidget {
+  const FormScreen({super.key});
+
+  @override
+  State<FormScreen> createState() => _FormScreenState();
+}
+
+class _FormScreenState extends State<FormScreen> {
+  final _formKey = GlobalKey<FormBuilderState>();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text("User Form")),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: FormBuilder(
+          key: _formKey,
+          child: Column(
+            children: [
+              // First Name
+              FormBuilderTextField(
+                name: 'firstName',
+                decoration: const InputDecoration(labelText: "First Name"),
+                validator: FormBuilderValidators.compose([
+                  FormBuilderValidators.required(),
+                  FormBuilderValidators.minLength(5),
+                  FormBuilderValidators.maxLength(15),
+                ]),
+              ),
+
+              // Last Name
+              FormBuilderTextField(
+                name: 'lastName',
+                decoration: const InputDecoration(labelText: "Last Name"),
+                validator: FormBuilderValidators.compose([
+                  FormBuilderValidators.required(),
+                  FormBuilderValidators.minLength(5),
+                  FormBuilderValidators.maxLength(15),
+                ]),
+              ),
+
+              // Phone Number
+              FormBuilderTextField(
+                name: 'phoneNumber',
+                decoration: const InputDecoration(labelText: "Phone Number"),
+                keyboardType: TextInputType.phone,
+                validator: FormBuilderValidators.compose([
+                  FormBuilderValidators.required(),
+                  FormBuilderValidators.match(r'^[0-9]{10}$',
+                      errorText: "Enter a valid 10-digit number"),
+                ]),
+              ),
+
+              // Email
+              FormBuilderTextField(
+                name: 'email',
+                decoration: const InputDecoration(labelText: "Email"),
+                keyboardType: TextInputType.emailAddress,
+                validator: FormBuilderValidators.compose([
+                  FormBuilderValidators.required(),
+                  FormBuilderValidators.email(errorText: "Enter a valid email"),
+                ]),
+              ),
+
+              const SizedBox(height: 20),
+
+              // Submit Button
+              ElevatedButton(
+                onPressed: () {
+                  if (_formKey.currentState?.saveAndValidate() ?? false) {
+                    final formData = _formKey.currentState!.value;
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text("Success: $formData")),
+                    );
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text("Validation failed")),
+                    );
+                  }
+                },
+                child: const Text("Submit"),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
